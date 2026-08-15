@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- NEW: GPS TRACKING LOGIC ---
   function sendTrackingData(lat = null, lon = null) {
-    fetch('/track', {
+    fetch('/api/ping', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ lat: lat, lon: lon })
