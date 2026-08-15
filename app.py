@@ -78,7 +78,7 @@ def index():
     resp.set_cookie('user_visits', str(user_visits), max_age=60*60*24*365)
     return resp
 
-@app.route('/api/track', methods=['POST'])
+@app.route('/track', methods=['POST'])
 def track_visitor():
     data = request.json
     lat = data.get('lat')
