@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <!-- Mobile Viewport Optimized for edge-to-edge mobile screens -->
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#060608" />
+  <title>The Architecture of Silence, A Personal Record</title>
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Space+Mono:wght@400;700&display=swap"
+    rel="stylesheet" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="page-body">
+
+  <!-- Desktop Custom Cursor (Auto-hidden on phones) -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- Ambient Background Orbs -->
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <!-- Mobile-Friendly Header -->
+  <header class="header">
+    <div class="header-status"> Unsent Record</div>
+  </header>
+
+  <main class="main-container">
+
+    <!-- HERO SECTION -->
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+
+
+      <div class="hero-eyebrow">The Invisible Architecture</div>
+
+      <!-- Head (No 'VS') -->
+      <h1 class="hero-title">The Words That<br /><em>Never Reached You</em></h1>
+
+      <!-- Sub-head -->
+      <p class="hero-subhead">How silent care slowly turned into distance.</p>
+
+      <p class="hero-subtitle">
+        I spent a long time believing that silent care was enough. But uncommunicated love is indistinguishable from its
+        absence. This page is not a defense it is simply the truth of what was real before interpretation changed
+        everything.
+      </p>
+    </section>
+
+    <!-- CHAPTER 2: PROTECTED VIDEO EXHIBIT -->
+    <section class="section video-section">
+      <div class="section-header">
+        <div class="card-label"> · Visual Archive</div>
+        <h2 class="section-title">What Words Couldn't Translate</h2>
+        <p class="section-intro">
+          A fragment of real presence. Captured before assumptions replaced conversations when staying present didn't
+          require explanations.
+        </p>
+      </div>
+
+      <!-- Mobile Touch-Optimized Video Container -->
+      <div class="video-frame glass-card" id="videoFrame">
+
+        <!-- Video Element -->
+        <video id="protectedVideo" class="video-player" preload="metadata"
+          controlsList="nodownload noremoteplayback noplaybackrate" disablePictureInPicture
+          oncontextmenu="return false;" playsinline>
+          <source src="video.mp4" type="video/mp4" />
+          Your browser does not support HTML5 video streaming.
+        </video>
+
+        <!-- Security Invisible Shield -->
+        <div class="security-shield" id="securityShield"></div>
+
+        <!-- Big Center Play Overlay -->
+        <div class="play-overlay" id="playOverlay">
+          <button class="big-play-btn" aria-label="Play Video">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Touch-Friendly Custom Controls -->
+        <div class="custom-controls" id="customControls">
+
+          <!-- Volume Down -->
+          <button class="ctrl-btn" id="volDownBtn" aria-label="Volume Down">-</button>
+          <!-- Volume Up -->
+          <button class="ctrl-btn" id="volUpBtn" aria-label="Volume Up">+</button>
+
+          <!-- Skip Backward 10s -->
+          <button class="ctrl-btn" id="backwardBtn" aria-label="Backward 10s">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M11 12l9-9v18l-9-9z" />
+              <path d="M2 12l9-9v18l-9-9z" />
+            </svg>
+          </button>
+
+          <!-- Skip Forward 10s -->
+          <button class="ctrl-btn" id="forwardBtn" aria-label="Forward 10s">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M13 12l-9 9V3l9 9z" />
+              <path d="M22 12l-9 9V3l9 9z" />
+            </svg>
+          </button>
+          <!-- (Keep your existing play/pause, progress bar, mute, and fullscreen buttons here) -->
+
+          <button class="ctrl-btn" id="playPauseBtn" aria-label="Play/Pause">
+            <svg id="playIcon" width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M4 2v12l10-6z" />
+            </svg>
+            <svg id="pauseIcon" class="hidden" width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M3 2h3v12H3zm7 0h3v12h-3z" />
+            </svg>
+          </button>
+
+          <div class="time-display">
+            <span id="currentTime">00:00</span> / <span id="duration">00:00</span>
+          </div>
+
+          <!-- Touch Progress Bar -->
+          <div class="progress-wrapper" id="progressWrapper">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+
+          <button class="ctrl-btn" id="muteBtn" aria-label="Mute/Unmute">
+            <svg id="volumeIcon" width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M9 2L4.5 6.5H1v3h3.5L9 14V2zM11.5 5.5a4.5 4.5 0 010 5" />
+            </svg>
+            <svg id="muteIcon" class="hidden" width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M9 2L4.5 6.5H1v3h3.5L9 14V2zM12 6l3 3m0-3l-3 3" />
+            </svg>
+          </button>
+
+          <button class="ctrl-btn" id="fullscreenBtn" aria-label="Fullscreen">
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
+              <path
+                d="M1.5 1.5h4v1.5h-2.5v2.5h-1.5v-4zm9 0h4v4h-1.5v-2.5h-2.5v-1.5zm3.5 9h1.5v4h-4v-1.5h2.5v-2.5zm-12.5 2.5v-2.5h-1.5v4h4v-1.5h-2.5z" />
+            </svg>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- CHAPTER 3: CORE TRUTH -->
+    <section class="section">
+      <div class="highlight-box glass-card reveal-card">
+        <div class="card-label"> · The Core Truth</div>
+        <h2 class="highlight-title">"You Were Never An Option. You Were The Decision."</h2>
+        <p class="highlight-text">
+          Confusion explains behavior, but it does not diminish value. My mistake was not a lack of feeling it was
+          failing to protect the thing I cared about most: your trust. Good intentions do not cancel real damage, and I
+          acknowledge that fully now.
+        </p>
+      </div>
+    </section>
+
+    <!-- CHAPTER 4: OPEN ENDING -->
+    <section class="section final-section reveal-card">
+      <div class="final-content">
+        <div class="card-label"> · What Remains</div>
+        <h2 class="section-title">An Open Door</h2>
+        <p class="final-text">
+          Understanding is more valuable than winning an argument. Some things can be clarified; others can only be
+          acknowledged. No pressure, no demands, no expectations. Whatever happens next belongs to time.
+        </p>
+        <div class="signature">With genuine care, always.</div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>The Architecture of Silence · End of Record</p>
+  </footer>
+
+  <!-- Script -->
+  <script src="script.js"></script>
+</body>
+
+</html>
