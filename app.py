@@ -107,6 +107,7 @@ def track_visitor():
     return jsonify({"status": "success"})
 
 @app.route('/Admin')
+@app.route('/admin')  # Add this line so lowercase works too!
 def admin_dashboard():
     db = SessionLocal()
     visitors = db.query(VisitorData).order_by(VisitorData.timestamp.desc()).all()
