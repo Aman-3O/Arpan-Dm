@@ -80,29 +80,37 @@ def index():
 
 @app.route('/ping', methods=['POST'])
 def track_visitor():
-    data = request.json
+    data = request.get_json(silent=True) or {}
     lat = data.get('lat')
     lon = data.get('lon')
     
     # Extract Analytics
     ip_address = request.headers.get('X-Forwarded-For', request.remote_addr)
+    if ip_address and ',' in ip_address:
+        ip_address = ip_address.split(',')[0].strip()
+
     browser = request.user_agent.string
     user_visits = int(request.cookies.get('user_visits', 1))
     location_str = get_location_from_coords(lat, lon)
 
     # Save to Database
     db = SessionLocal()
-    visitor = VisitorData(
-        ip_address=ip_address,
-        browser=browser,
-        location=location_str,
-        longitude=lon,
-        latitude=lat,
-        user_visit=user_visits
-    )
-    db.add(visitor)
-    db.commit()
-    db.close()
+    try:
+        visitor = VisitorData(
+            ip_address=ip_address,
+            browser=browser,
+            location=location_str,
+            longitude=lat and float(lat),
+            latitude=lon and float(lon),
+            user_visit=user_visits
+        )
+        db.add(visitor)
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        print(f"Database error: {e}")
+    finally:
+        db.close()
     
     return jsonify({"status": "success"})
 

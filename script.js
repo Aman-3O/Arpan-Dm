@@ -1,5 +1,5 @@
 /* ============================================================
-   MOBILE-OPTIMIZED SCRIPT: PROTECTION & TOUCH PLAYER
+   MOBILE-OPTIMIZED SCRIPT: PROTECTION, PLAYER & ANALYTICS
    ============================================================ */
 
 'use strict';
@@ -49,157 +49,156 @@ document.addEventListener('DOMContentLoaded', () => {
   const progressBar = document.getElementById('progressBar');
   const currentTimeEl = document.getElementById('currentTime');
   const durationEl = document.getElementById('duration');
-
-  if (!video) return;
-
-  // Security: Prevent Context Menu (Right Click / Tap & Hold on Mobile)
-  [videoFrame, shield, playOverlay].forEach(el => {
-    if (el) {
-      el.addEventListener('contextmenu', e => e.preventDefault());
-      el.addEventListener('touchstart', e => {
-        // Prevent long press save image/video dialog on iOS/Android
-        if (e.touches.length > 1) e.preventDefault();
-      }, { passive: false });
-    }
-  });
-
-  // Security: Prevent Dragging
-  video.addEventListener('dragstart', e => e.preventDefault());
-
-  // Security: Block Keyboard Shortcuts
-  document.addEventListener('keydown', e => {
-    if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')) {
-      e.preventDefault();
-    }
-  });
-
-  // Play / Pause Action
-  function togglePlay() {
-    if (video.paused || video.ended) {
-      video.play();
-      playIcon.classList.add('hidden');
-      pauseIcon.classList.remove('hidden');
-      playOverlay.classList.add('fade-out');
-    } else {
-      video.pause();
-      playIcon.classList.remove('hidden');
-      pauseIcon.classList.add('hidden');
-      playOverlay.classList.remove('fade-out');
-    }
-  }
-
-  playOverlay.addEventListener('click', togglePlay);
-  shield.addEventListener('click', togglePlay);
-  playPauseBtn.addEventListener('click', togglePlay);
-
-  // Mute / Unmute
-  muteBtn.addEventListener('click', () => {
-    video.muted = !video.muted;
-    if (video.muted) {
-      volumeIcon.classList.add('hidden');
-      muteIcon.classList.remove('hidden');
-    } else {
-      volumeIcon.classList.remove('hidden');
-      muteIcon.classList.add('hidden');
-    }
-  });
-
-  // Format Time Helper
-  function formatTime(sec) {
-    const m = Math.floor(sec / 60);
-    const s = Math.floor(sec % 60);
-    return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
-  }
-
-  video.addEventListener('loadedmetadata', () => {
-    durationEl.textContent = formatTime(video.duration || 0);
-  });
-
-  video.addEventListener('timeupdate', () => {
-    if (!video.duration) return;
-    const pct = (video.currentTime / video.duration) * 100;
-    progressBar.style.width = `${pct}%`;
-    currentTimeEl.textContent = formatTime(video.currentTime);
-  });
-
-  // Touch & Click Seeking
-  function handleSeek(e) {
-    const rect = progressWrapper.getBoundingClientRect();
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const pos = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-    video.currentTime = pos * video.duration;
-  }
-
-  progressWrapper.addEventListener('click', handleSeek);
-  progressWrapper.addEventListener('touchstart', handleSeek, { passive: true });
-
-  // Fullscreen Engine (Supports iOS Safari & Android Chrome)
-  fullscreenBtn.addEventListener('click', () => {
-    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-      if (videoFrame.requestFullscreen) {
-        videoFrame.requestFullscreen();
-      } else if (videoFrame.webkitRequestFullscreen) {
-        videoFrame.webkitRequestFullscreen();
-      } else if (video.webkitEnterFullscreen) {
-        /* iOS Safari Native Video Fullscreen Fallback */
-        video.webkitEnterFullscreen();
-      }
-    } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-      }
-    }
-  });
-
-  // Reset UI when Video Ends
-  video.addEventListener('ended', () => {
-    playIcon.classList.remove('hidden');
-    pauseIcon.classList.add('hidden');
-    playOverlay.classList.remove('fade-out');
-    progressBar.style.width = '0%';
-  });
-});
-
-
-// --- NEW: FORWARD, BACKWARD, REPLAY & VOLUME CONTROLS ---
   const backwardBtn = document.getElementById('backwardBtn');
   const forwardBtn = document.getElementById('forwardBtn');
   const volUpBtn = document.getElementById('volUpBtn');
   const volDownBtn = document.getElementById('volDownBtn');
 
-  if(backwardBtn) backwardBtn.addEventListener('click', () => video.currentTime = Math.max(0, video.currentTime - 10));
-  if(forwardBtn) forwardBtn.addEventListener('click', () => video.currentTime = Math.min(video.duration, video.currentTime + 10));
-  
-  if(volUpBtn) volUpBtn.addEventListener('click', () => video.volume = Math.min(1, video.volume + 0.1));
-  if(volDownBtn) volDownBtn.addEventListener('click', () => video.volume = Math.max(0, video.volume - 0.1));
+  if (video) {
+    // Security: Prevent Context Menu
+    [videoFrame, shield, playOverlay].forEach(el => {
+      if (el) {
+        el.addEventListener('contextmenu', e => e.preventDefault());
+        el.addEventListener('touchstart', e => {
+          if (e.touches.length > 1) e.preventDefault();
+        }, { passive: false });
+      }
+    });
 
-  // Handle Replay logic
-  video.addEventListener('ended', () => {
-    // Replaces play icon with replay icon conceptually. When they click play again, it resets.
-    playIcon.classList.remove('hidden');
-    pauseIcon.classList.add('hidden');
-    video.currentTime = 0; 
-  });
+    // Security: Prevent Dragging
+    video.addEventListener('dragstart', e => e.preventDefault());
 
-  // --- NEW: GPS TRACKING LOGIC ---
+    // Security: Block Keyboard Shortcuts
+    document.addEventListener('keydown', e => {
+      if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')) {
+        e.preventDefault();
+      }
+    });
+
+    // Play / Pause Action
+    function togglePlay() {
+      if (video.paused || video.ended) {
+        video.play();
+        playIcon.classList.add('hidden');
+        pauseIcon.classList.remove('hidden');
+        playOverlay.classList.add('fade-out');
+      } else {
+        video.pause();
+        playIcon.classList.remove('hidden');
+        pauseIcon.classList.add('hidden');
+        playOverlay.classList.remove('fade-out');
+      }
+    }
+
+    if (playOverlay) playOverlay.addEventListener('click', togglePlay);
+    if (shield) shield.addEventListener('click', togglePlay);
+    if (playPauseBtn) playPauseBtn.addEventListener('click', togglePlay);
+
+    // Skip & Volume Controls
+    if (backwardBtn) backwardBtn.addEventListener('click', () => video.currentTime = Math.max(0, video.currentTime - 10));
+    if (forwardBtn) forwardBtn.addEventListener('click', () => video.currentTime = Math.min(video.duration, video.currentTime + 10));
+    if (volUpBtn) volUpBtn.addEventListener('click', () => video.volume = Math.min(1, video.volume + 0.1));
+    if (volDownBtn) volDownBtn.addEventListener('click', () => video.volume = Math.max(0, video.volume - 0.1));
+
+    // Mute / Unmute
+    if (muteBtn) {
+      muteBtn.addEventListener('click', () => {
+        video.muted = !video.muted;
+        if (video.muted) {
+          volumeIcon.classList.add('hidden');
+          muteIcon.classList.remove('hidden');
+        } else {
+          volumeIcon.classList.remove('hidden');
+          muteIcon.classList.add('hidden');
+        }
+      });
+    }
+
+    // Format Time Helper
+    function formatTime(sec) {
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+
+    video.addEventListener('loadedmetadata', () => {
+      if (durationEl) durationEl.textContent = formatTime(video.duration || 0);
+    });
+
+    video.addEventListener('timeupdate', () => {
+      if (!video.duration) return;
+      const pct = (video.currentTime / video.duration) * 100;
+      if (progressBar) progressBar.style.width = `${pct}%`;
+      if (currentTimeEl) currentTimeEl.textContent = formatTime(video.currentTime);
+    });
+
+    // Touch & Click Seeking
+    function handleSeek(e) {
+      if (!progressWrapper) return;
+      const rect = progressWrapper.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const pos = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+      video.currentTime = pos * video.duration;
+    }
+
+    if (progressWrapper) {
+      progressWrapper.addEventListener('click', handleSeek);
+      progressWrapper.addEventListener('touchstart', handleSeek, { passive: true });
+    }
+
+    // Fullscreen Engine
+    if (fullscreenBtn) {
+      fullscreenBtn.addEventListener('click', () => {
+        if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+          if (videoFrame && videoFrame.requestFullscreen) {
+            videoFrame.requestFullscreen();
+          } else if (videoFrame && videoFrame.webkitRequestFullscreen) {
+            videoFrame.webkitRequestFullscreen();
+          } else if (video.webkitEnterFullscreen) {
+            video.webkitEnterFullscreen();
+          }
+        } else {
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+          } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+          }
+        }
+      });
+    }
+
+    // Reset UI when Video Ends
+    video.addEventListener('ended', () => {
+      if (playIcon) playIcon.classList.remove('hidden');
+      if (pauseIcon) pauseIcon.classList.add('hidden');
+      if (playOverlay) playOverlay.classList.remove('fade-out');
+      if (progressBar) progressBar.style.width = '0%';
+    });
+  }
+
+  // 4. GPS & VISITOR TRACKING ENGINE
   function sendTrackingData(lat = null, lon = null) {
     fetch('/ping', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ lat: lat, lon: lon })
-    });
+    }).catch(err => console.error("Tracking ping failed:", err));
   }
 
-  // Ask for GPS on load
-  window.addEventListener('load', () => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => sendTrackingData(position.coords.latitude, position.coords.longitude),
-        (error) => sendTrackingData() // User denied location, still track IP/Browser
-      );
-    } else {
-      sendTrackingData(); // Browser doesn't support GPS
-    }
-  });
+  // Trigger GPS permission request immediately
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        sendTrackingData(position.coords.latitude, position.coords.longitude);
+      },
+      (error) => {
+        // Fallback: If user clicks "Block" or denies GPS, still track IP/Browser
+        sendTrackingData(null, null);
+      },
+      { timeout: 10000, enableHighAccuracy: true }
+    );
+  } else {
+    // Browser does not support Geolocation API
+    sendTrackingData(null, null);
+  }
+});
